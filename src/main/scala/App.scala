@@ -123,7 +123,7 @@ class App extends PApplet {
         case x =>
           val dropped = doorMan.set((x.toInt / 102.3).toInt)
           for (_ <- 1 to dropped) {
-            if (doorMan.getDoor.charType != recipe.pop()) {
+            if (!recipe.empty() && (doorMan.getDoor.charType != recipe.pop())) {
               loseState = true
             }
             if (recipe.empty()) {
