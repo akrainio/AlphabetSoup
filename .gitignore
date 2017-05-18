@@ -1,0 +1,43 @@
+# Created by .ignore support plugin (hsz.mobi)
+### SBT template
+# Simple Build Tool
+# http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
+
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+.history
+.cache
+.lib/
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen### Scala template
+*.class
+*.log
+### Processing template
+.DS_Store
+applet
+application.linux32
+application.linux64
+application.windows32
+application.windows64
+application.macosx
+.idea/
+project/target/
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+gen
+.pioenvs
+.piolibdeps
+.clang_complete
+.gcc-flags.json

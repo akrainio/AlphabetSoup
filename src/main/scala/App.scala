@@ -28,7 +28,7 @@ class App extends PApplet {
 
   override def draw(): Unit = {
     background(255)
-    val f = createFont("Consolas",16,true)
+    val f = createFont("Monospaced",16,true)
     textFont(f, 16)
     fill(0)
     if (winState) {
