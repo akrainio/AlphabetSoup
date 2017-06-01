@@ -13,6 +13,8 @@ class App extends PApplet {
   var winState = false
   var loseState = false
 
+  val maxPower: Float = 1021
+
   val base: Array[Array[Char]] = Array (
     Array(' ','|','A','A','A','A','A','A','A',' ','|',' ',' ','|','B','B','B','B','B','B','B',' ','|',' ',' ','|','C','C','C','C','C','C','C',' ','|',' '),
     Array(' ','=','=','=','=','=','=','=','=','=','=',' ',' ','=','=','=','=','=','=','=','=','=','=',' ',' ','=','=','=','=','=','=','=','=','=','=',' ')
@@ -36,7 +38,7 @@ class App extends PApplet {
     } else if (loseState) {
       text("You Lose!\nReset potentiometer and press both\nbuttons to play again", 10, 100)
     } else {
-      text(toString(), 10, 100)
+      text(toString(), 10, 10)
     }
   }
 
@@ -82,7 +84,6 @@ class App extends PApplet {
         stringBuilder.append("|").append(recipe.elementAt(i)).append("|\n")
       }
     }
-
     stringBuilder.toString()
   }
 
@@ -103,31 +104,29 @@ class App extends PApplet {
       }
     } else {
       str match {
-        case "L" =>
-          if (prevInput != "L") {
-            doorMan.prev()
-            prevInput = "L"
-          }
-        case "R" =>
-          if (prevInput != "R") {
-            doorMan.next()
-            prevInput = "R"
-          }
         case "LR" =>
+          println("reseting")
           if (prevInput != "LR") {
             reset()
             prevInput = "LR"
           }
         case "N" =>
           prevInput = ""
+        case "lose" =>
+          println("out of time")
+          loseState = true;
         case x =>
-          val dropped = doorMan.set((x.toInt / 102.3).toInt)
-          for (_ <- 1 to dropped) {
-            if (!recipe.empty() && (doorMan.getDoor.charType != recipe.pop())) {
-              loseState = true
-            }
-            if (recipe.empty()) {
-              winState = true
+          val dropped = doorMan.set(x.split("\\."), maxPower / 10)
+          for ((n, i) <- dropped.zipWithIndex) {
+            for (_ <- 1 to n) {
+              if (!recipe.empty() && (doorMan.getDoor(i).charType != recipe.pop())) {
+                loseState = true
+                myPort.write("wrong\n")
+              }
+              if (recipe.empty()) {
+                winState = true
+                myPort.write("win\n")
+              }
             }
           }
       }

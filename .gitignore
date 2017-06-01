@@ -9,7 +9,6 @@ lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
-.history
 .cache
 .lib/
 ### Example user template template
@@ -17,10 +16,7 @@ project/plugins/project/
 
 # IntelliJ project files
 .idea
-*.iml
-out
 gen### Scala template
-*.class
 *.log
 ### Processing template
 .DS_Store
@@ -30,10 +26,6 @@ application.linux64
 application.windows32
 application.windows64
 application.macosx
-.idea/
-project/target/
-### Example user template template
-### Example user template
 
 # IntelliJ project files
 gen

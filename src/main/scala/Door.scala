@@ -1,7 +1,7 @@
 class Door(val charType: Char) {
 
-  private val maxSlide = 9
-  private val maxStock = 8
+  val maxSlide = 9
+  val maxStock = 8
   var slide: Int = maxSlide
   var stock: Int = maxStock
 
