@@ -118,14 +118,17 @@ class App extends PApplet {
         case x =>
           val dropped = doorMan.set(x.split("\\."), maxPower / 10)
           for ((n, i) <- dropped.zipWithIndex) {
-            for (_ <- 1 to n) {
-              if (!recipe.empty() && (doorMan.getDoor(i).charType != recipe.pop())) {
-                loseState = true
-                myPort.write("wrong\n")
-              }
-              if (recipe.empty()) {
-                winState = true
-                myPort.write("win\n")
+            if (n != 0) {
+              for (_ <- 1 to n) {
+                if (!recipe.empty() && (doorMan.getDoor(i).charType != recipe.peek())) {
+                  loseState = true
+                  println(s"Expected ${doorMan.getDoor(i).charType}, got ${recipe.peek()}")
+                  //                myPort.write("wrong\n")
+                } else recipe.pop()
+                if (recipe.empty()) {
+                  winState = true
+                  //                myPort.write("win\n")
+                }
               }
             }
           }
