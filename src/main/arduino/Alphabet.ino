@@ -44,12 +44,15 @@ void setup() {
 
 void loop() {
   int delayTime = 100;
-  if (Serial.read() == "wrong") {
+  char receiveState = Serial.read();
+  if (receiveState == 'l') {
     inLoseState = true;
     tone(buzzerPin, frequency('c'), 450);
-  } else if (Serial.read() == "win") {
+  } else if (receiveState == 'w') {
     inWinState = true;
     tone(buzzerPin, frequency('a'), 100);
+    delay(150);
+    tone(buzzerPin, frequency('a'), 300);
     delay(100);
   }
 

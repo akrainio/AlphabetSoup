@@ -8,10 +8,12 @@ class App extends PApplet {
   var myPort: Serial = _
   var str: String = _
   var firstContact = false
+  val recipeSize = 10
   var recipe: util.Stack[Char] = genRecipe()
   var prevInput = ""
   var winState = false
   var loseState = false
+  var wrote = false
 
   val maxPower: Float = 1021
 
@@ -57,7 +59,7 @@ class App extends PApplet {
   def genRecipe(): util.Stack[Char] = {
     val rand = new Random
     val stack = new util.Stack[Char]
-    for (_ <- 0 to 9) {
+    for (_ <- 0 until recipeSize) {
       rand.nextInt(3) match {
         case 0 => stack.push('A')
         case 1 => stack.push('B')
@@ -77,11 +79,16 @@ class App extends PApplet {
       stringBuilder.append("\n")
     }
 
-    for (i <- 0 to 9) {
-      if (recipe.size() <= i) {
+    for (j <- 0 until recipeSize) {
+      var i = recipeSize - j - 1
+      if (i >= recipe.size()) {
         stringBuilder.append("| |\n")
       } else {
-        stringBuilder.append("|").append(recipe.elementAt(i)).append("|\n")
+        stringBuilder.append("|").append(recipe.elementAt(i)).append("|")
+        if (i + 1 == recipe.size()) {
+          stringBuilder.append("<-\n")
+        }
+        else stringBuilder.append("\n")
       }
     }
     stringBuilder.toString()
@@ -122,12 +129,26 @@ class App extends PApplet {
               for (_ <- 1 to n) {
                 if (!recipe.empty() && (doorMan.getDoor(i).charType != recipe.peek())) {
                   loseState = true
-                  println(s"Expected ${doorMan.getDoor(i).charType}, got ${recipe.peek()}")
-                  //                myPort.write("wrong\n")
-                } else recipe.pop()
-                if (recipe.empty()) {
+                  println(s"Expected ${recipe.peek()}, got ${doorMan.getDoor(i).charType}")
+                  if (!wrote) {
+                    myPort.write('l')
+                    wrote = true
+                  }
+                } else if (recipe.empty()) {
                   winState = true
-                  //                myPort.write("win\n")
+                  if (!wrote) {
+                    myPort.write('w')
+                    wrote = true
+                  }
+                } else {
+                  recipe.pop()
+                  if (recipe.empty()) {
+                    winState = true
+                    if (!wrote) {
+                      myPort.write('w')
+                      wrote = true
+                    }
+                  }
                 }
               }
             }
@@ -141,6 +162,7 @@ class App extends PApplet {
     doorMan.reset()
     winState = false
     loseState = false
+    wrote = false
   }
 
 }
